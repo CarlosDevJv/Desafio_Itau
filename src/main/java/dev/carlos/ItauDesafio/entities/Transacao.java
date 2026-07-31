@@ -1,9 +1,6 @@
 package dev.carlos.ItauDesafio.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,12 +10,20 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Table(name = "tb_transacao")
 public class Transacao {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Id
-    private Long id;
+    private String id;
     private Double valor;
     private OffsetDateTime dataHora;
+
+    @ManyToOne
+    @JoinColumn(name = "remetente")
+    private User remetente;
+    @ManyToOne
+    @JoinColumn(name = "destinatario")
+    private User destinatario;
 
     public Transacao (Double valor, OffsetDateTime dataHora){
         this.valor = valor;
