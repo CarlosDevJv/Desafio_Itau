@@ -1,6 +1,6 @@
 CREATE TABLE tb_users(
     id VARCHAR(300) PRIMARY KEY,
-    name VARCHAR(150) NOT NULL,
+    nome VARCHAR(150) NOT NULL,
     email VARCHAR(150) NOT NULL,
     senha VARCHAR(400) NOT NULL,
     saldo DECIMAL(15,2) NOT NULL,

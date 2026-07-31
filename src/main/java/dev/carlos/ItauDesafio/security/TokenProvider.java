@@ -44,7 +44,7 @@ public class TokenProvider {
                     .verify(token)
                     .getSubject();
         } catch (JWTCreationException jwtCreationException){
-            throw  new RuntimeException();
+            return null;
         }
     }
 
