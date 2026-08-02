@@ -1,29 +1,43 @@
 package dev.carlos.ItauDesafio.service;
 
 import dev.carlos.ItauDesafio.entities.Transacao;
+import dev.carlos.ItauDesafio.entities.User;
 import dev.carlos.ItauDesafio.entities.dto.request.TransacaoRequest;
-import org.springframework.http.HttpStatus;
+import dev.carlos.ItauDesafio.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.DoubleSummaryStatistics;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TransacaoService {
+    @Autowired
+    UserRepository userRepository;
 
     List<Transacao> transacaoList = new ArrayList<>();
     List<Double> transacoesRecentes = new ArrayList<>();
 
-    public HttpStatus criarTransacao(TransacaoRequest request){
-        if (request.valor() < 0){
-            throw new IllegalArgumentException("O VALOR DA TRANSFERÊNCIA NÃO PODE SER MENOR QUE ZERO");
+    public void criarTransacao(TransacaoRequest request){
+        User remetente;
+        User destinatario;
+
+        if (!request.emailRemetente().isEmpty() && !request.emailDestinatario().isEmpty()){
+            remetente = userRepository.findByEmail(request.emailRemetente()).orElseThrow(() -> new EntityNotFoundException("Remetente não encontrado"));
+            destinatario = userRepository.findByEmail(request.emailDestinatario()).orElseThrow(() -> new EntityNotFoundException("Destinatário não encontrado"));
+            if ((request.valor() < 0) || (request.valor() > remetente.getSaldo())){
+                throw new IllegalArgumentException("VALOR INSUFICIENTE");
+            }
+            remetente.setSaldo(remetente.getSaldo() - request.valor());
+            destinatario.setSaldo(destinatario.getSaldo() + request.valor());
+            userRepository.save(remetente);
+            userRepository.save(destinatario);
+            Transacao transacao = new Transacao(remetente, destinatario,request.valor(), OffsetDateTime.now());
+            arqurivar(transacao);
         }
-        Transacao transacao = new Transacao(request.valor(), OffsetDateTime.now());
-        arqurivar(transacao);
-        return HttpStatus.CREATED;
     }
 
     public void arqurivar(Transacao transacao){

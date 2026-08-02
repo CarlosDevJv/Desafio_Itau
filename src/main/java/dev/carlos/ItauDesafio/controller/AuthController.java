@@ -54,8 +54,8 @@ public class AuthController {
             User newUser = new User();
             newUser.setEmail(registerRequest.email());
             newUser.setNome(registerRequest.nome());
-            newUser.setSaldo(0.0);
-            newUser.setNumeroConta(1L); //Teste
+            newUser.setSaldo(1500.0);
+            newUser.setNumeroConta(User.gerarSenha11Digitos()); //Teste
             newUser.setSenha(passwordEncoder.encode(registerRequest.senha()));
             userRepository.save(newUser);
 

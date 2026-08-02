@@ -63,8 +63,8 @@ public class User implements UserDetails {
     private static final SecureRandom random = new SecureRandom();
 
     public static long gerarSenha11Digitos() {
-        long min = 10000000000L; // Menor número de 11 dígitos
-        long max = 99999999999L; // Maior número de 11 dígitos
+        long min = 100000L; // Menor número de 11 dígitos
+        long max = 999999L; // Maior número de 11 dígitos
 
         // Gera um número entre min e max (inclusivo)
         return min + (long)(random.nextDouble() * (max - min + 1));

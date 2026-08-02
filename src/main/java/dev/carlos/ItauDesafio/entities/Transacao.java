@@ -25,9 +25,11 @@ public class Transacao {
     @JoinColumn(name = "destinatario")
     private User destinatario;
 
-    public Transacao (Double valor, OffsetDateTime dataHora){
+    public Transacao (User remetente, User destinatario,  Double valor, OffsetDateTime dataHora){
         this.valor = valor;
         this.dataHora = dataHora;
+        this.remetente = remetente;
+        this.destinatario = destinatario;
     }
     public Transacao (Double valor){
         this.valor = valor;
@@ -36,7 +38,7 @@ public class Transacao {
 
     @Override
     public String toString(){
-        return "Valor : " + getValor() + " Data/Hora: " + getDataHora() + "\n";
+        return "Valor : " + getValor() + " Data/Hora: " + getDataHora() + " Remetente: " + getRemetente() + " Destinatário: " + getDestinatario() +"\n";
     }
 
 
